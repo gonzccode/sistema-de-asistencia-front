@@ -1,5 +1,7 @@
 <template>
-  <Tutorial/>
+  <div>
+    Aqui va la pagina principal :'v
+  </div>
 </template>
 
 <script lang="ts">
