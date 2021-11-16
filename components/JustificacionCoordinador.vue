@@ -1,7 +1,6 @@
 <template>
     <div class="justificacion-coordinador">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-        <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         
         
@@ -18,20 +17,10 @@
             <form class="form-datos-alumno">
                 <div class="mb-2">
                     <label for="exampleInputEmail1" class="form-label"><strong>Código de alumno</strong> </label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Escriba el código">
-                    
-                </div>
-                <div class="mb-2">
-                    <label for="exampleInputPassword1" class="form-label"><strong>Nombre(s)</strong> </label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Escriba el nombre">
-                </div>
-                <div class="mb-2">
-                    <label for="exampleInputPassword1" class="form-label"><strong>Apellidos</strong> </label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Escriba el apellido">
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Escriba el código">s
                 </div>
                 <button type="submit" class="btn btn-primary">Buscar</button>
             </form>
-            <!--<button type="button" class="btn btn-primary">Primary</button>-->
         </div>
         <div class="lista-justificacion">
             <div class="btn-group" role="group" aria-label="Basic outlined example">

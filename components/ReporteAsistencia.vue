@@ -10,7 +10,6 @@
             <div class="foto-coordinador">
                 <img src="@/assets/images/coordinador-academia.png" height="60em">
             </div>
-
         </div>
         <div class="opcion-reporte" >
             <div class="btn-group" >
@@ -27,17 +26,7 @@
                     <div class="mb-2">
                         <label for="exampleInputEmail1" class="form-label"><strong>Código de alumno</strong> </label>
                         <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Escriba el código">
-                        
                     </div>
-                    <div class="mb-2">
-                        <label for="exampleInputPassword1" class="form-label"><strong>Nombre(s)</strong> </label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Escriba el nombre">
-                    </div>
-                    <div class="mb-2">
-                        <label for="exampleInputPassword1" class="form-label"><strong>Apellidos</strong> </label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Escriba el apellido">
-                    </div>
-                    
                     <button type="submit" class="btn btn-primary">Buscar</button>
                 </div>
             

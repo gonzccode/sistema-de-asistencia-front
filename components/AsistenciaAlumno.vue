@@ -92,7 +92,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-success btn-lg" style="background-color: #22be34">Generar Reporte</button>
+                
             </div>
         </div>
     </div>

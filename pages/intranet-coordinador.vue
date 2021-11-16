@@ -57,12 +57,10 @@
                 </div>
             </div>
             <div class="option-intranet-coordinador" >
-                
+                    <InicioCoordinador v-if="!showJustificacion && showInicio && !showReporte && !showRegistro" />
+                    <AsistenciaCoordinador v-if="!showJustificacion && !showInicio && !showReporte && showRegistro" />
                     <JustificacionCoordinador v-if="showJustificacion && !showInicio && !showReporte && !showRegistro" />
-                
                     <ReporteAsistencia v-if="!showJustificacion && !showInicio && showReporte && !showRegistro"/>
-                
-                
             </div>
          </div>
     </div>
@@ -70,11 +68,15 @@
 
 <script lang="ts">
     import {Component, Vue } from "nuxt-property-decorator";
+    import InicioCoordinador from "~/components/InicioCoordinador.vue";
+    import AsistenciaCoordinador from "~/components/AsistenciaCoordinador.vue";
     import JustificacionCoordinador from "~/components/JustificacionCoordinador.vue";
     import ReporteAsistencia from "~/components/ReporteAsistencia.vue";
   
     @Component({
         components: {
+            InicioCoordinador,
+            AsistenciaCoordinador,
             JustificacionCoordinador,
             ReporteAsistencia    
             

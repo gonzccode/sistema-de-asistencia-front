@@ -52,10 +52,11 @@
                 </div>
             </div>
             <div class="option-intranet-alumno" >
-                
+                    <InicioAlumno v-if="!showJustificacion && showInicio && !showReporte && !showRegistro" />
+                    <AsistenciaAlumno v-if="!showJustificacion && !showInicio && !showReporte && showRegistro" />
                     <JustificacionAlumno v-if="showJustificacion && !showInicio && !showReporte && !showRegistro" />
-                
-                    <ReporteAsistencia v-if="!showJustificacion && !showInicio && showReporte && !showRegistro"/>
+
+                    
                 
                 
             </div>
@@ -65,13 +66,18 @@
 
 <script lang="ts">
     import {Component, Vue } from "nuxt-property-decorator";
+    import InicioAlumno from "~/components/InicioAlumno.vue";
+    //@ts-ignore
+    import AsistenciaAlumno from "~/components/AsistenciaAlumno.vue";
+    //@ts-ignore
     import JustificacionAlumno from "~/components/JustificacionAlumno.vue";
-    import ReporteAsistencia from "~/components/ReporteAsistencia.vue";
+    
   
     @Component({
         components: {
-            JustificacionAlumno,
-            ReporteAsistencia    
+            InicioAlumno,
+            AsistenciaAlumno,
+            JustificacionAlumno   
             
         }
     })
