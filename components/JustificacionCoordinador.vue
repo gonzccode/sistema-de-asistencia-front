@@ -17,7 +17,7 @@
             <form class="form-datos-alumno">
                 <div class="mb-2">
                     <label for="exampleInputEmail1" class="form-label"><strong>Código de alumno</strong> </label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Escriba el código">s
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Escriba el código">
                 </div>
                 <button type="submit" class="btn btn-primary">Buscar</button>
             </form>

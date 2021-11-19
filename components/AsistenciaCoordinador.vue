@@ -76,6 +76,7 @@
     import TablaAsistencia from "~/components/TablaAsistencia.vue";
   
     @Component({
+        //@ts-ignore
         TablaAsistencia
     })
     
