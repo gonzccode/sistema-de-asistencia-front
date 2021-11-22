@@ -259,39 +259,45 @@
     
 </template>
 
-<script lang="ts">
+<script >
     import {Component, Vue} from "nuxt-property-decorator"
-  
-    @Component({})
     
+    export default {
+        data() {
+            return {
+                showAlumno: true,
+                showAula: false,
+                showTurno : false
+            }
+            
+        },
+        components:{
+            Component,
+            Vue
+        },
 
-    export default class extends Vue {
-        showAlumno = true
-        showAula = false
-        showTurno = false
-
-        viewAlumno(){
+        methods :{
+            viewAlumno(){
             this.showAlumno=true
             this.showAula = false
             this.showTurno = false
             
+            },
+
+            viewAula(){
+                this.showAlumno=false
+                this.showAula = true
+                this.showTurno = false
+                
+            },
+
+            viewTurno(){
+                this.showAlumno=false
+                this.showAula = false
+                this.showTurno = true
+                
+            }
         }
-
-        viewAula(){
-            this.showAlumno=false
-            this.showAula = true
-            this.showTurno = false
-            
-        }
-
-        viewTurno(){
-            this.showAlumno=false
-            this.showAula = false
-            this.showTurno = true
-            
-        }
-
-
     }
 </script>
 
