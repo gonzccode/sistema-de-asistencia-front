@@ -1,5 +1,6 @@
 <template>
-    <div class="reporte-asistencia">
+       
+    <div class="reporte-asistencia" > <!-- id="app" -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -43,53 +44,18 @@
                         <th>Estado</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>Escaner</td>
-                        <td>20/09/2021</td>
-                        <td>08:15 am</td>
-                        <td>Ricardo Quispe</td>
-                        <td style="padding:5px 20px">
-                            <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">
-                                Asistió
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Manual</td>
-                        <td>19/09/2021</td>
-                        <td>08:20 am</td>
-                        <td>Juan Quispe</td>
-                        <td style="padding:5px 20px">
-                            <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
-                                Tardanza
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td> -- </td>
-                        <td>18/09/2021</td>
-                        <td> -- </td>
-                        <td>Juan Quispe</td>
-                        <td style="padding:5px 20px">
-                            <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
-                                No asistió
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <tr>
-                        <td>Escaner</td>
-                        <td>17/09/2021</td>
-                        <td>08:10 am</td>
-                        <td>Ricardo Quispe</td>
-                        <td style="padding:5px 20px">
-                            <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">
-                                Asistió
-                            </div>
-                        </td>
-                    
-                    </tr>
+                    <tbody >
+                        <tr v-for="item in lista" v-bind:key="item.id">
+               <td>{{item.id}}</td>
+               <td>{{item.fecha}}</td>
+               <td>{{item.hora}}</td>
+               <td>{{item.nombreCoordinador}}</td>
+               <td>{{item.nombreEstado}}</td>
+            </tr>
+
+
+
+                     
                     </tbody>
                 </table>
                 
@@ -100,46 +66,39 @@
 </template>
 
 <script >
-    import {Component, Vue} from "nuxt-property-decorator";
-    
-    export default {
-        data: {
-            showAlumno: true,
-            showAula: false,
-            showTurno : false
-        },
+import {Component, Vue} from "nuxt-property-decorator"
 
-        components:{
+export default {
+
+  data() {
+    return {
+      lista: []
+      }
+    },
+
+    components:{
             Component,
             Vue
-        },
+    },
 
-        methods :{
-            viewAlumno(){
-            this.showAlumno=true
-            this.showAula = false
-            this.showTurno = false
-            
-            },
+    methods:{
 
-            viewAula(){
-                this.showAlumno=false
-                this.showAula = true
-                this.showTurno = false
-                
-            },
+        getProducto1:function(){
+            this.$http.get("http://localhost/APIVUE/")
+              .then(respuesta => {
+                 this.lista = respuesta.data
+                 console.log(respuesta.data) })
+              .catch(error => {console.log("HOLA") })
+    }//fin de la funcion getProducto
 
-            viewTurno(){
-                this.showAlumno=false
-                this.showAula = false
-                this.showTurno = true
-                
-            }
-        }
+    },
+     created() {
+        this.getProducto1();
     }
+}    
+
+
 </script>
-
-
 
 <style>
     .reporte-asistencia {
