@@ -1,6 +1,6 @@
 <template>
-       
     <div class="reporte-asistencia" > <!-- id="app" -->
+    
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -11,30 +11,27 @@
             <div class="foto-coordinador">
                 <img src="@/assets/images/estudiante-perfil.jpg" height="60em">
             </div>
-
         </div>
 
         <div class="datos-alumno-asistencia">
             <form class="form-alumno-asistencia" >
                 <div class="mb-2">
                         <label for="exampleInputEmail1" class="form-label"><strong>Fecha</strong> </label>
-                        <!--<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">-->
                         <select class="form-select" id="exampleInputEmail1"  aria-label="Default select example">
                             <option selected>Últimos 7 días</option>
-                            <!-- <option value="1">Últimos 7 días</option> -->
                             <option value="2">Últimos mes</option>
                             <option value="3">Últimos 6 meses</option>
+                           
                         
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Buscar</button>
+
+                    <button type="button" :class="showDias?'btn btn-primary active':'btn btn-primary'" @click="viewDias()" >Buscar</button>
             </form>
-            <!--<button type="button" class="btn btn-primary">Primary</button>-->
         </div>
         <div class="lista-asistencia">
-            
             <div class="table-asistencia" align="center">
-                <table class="table table-bordered" >
+                <table class="table table-bordered" id="pruebaH">
                     <thead>
                     <tr>
                         <th>Tipo Asistencia</th>
@@ -44,61 +41,185 @@
                         <th>Estado</th>
                     </tr>
                     </thead>
-                    <tbody >
+                    <tbody v-if="showDias && !showMes && !showMeses">
                         <tr v-for="item in lista" v-bind:key="item.id">
-               <td>{{item.id}}</td>
-               <td>{{item.fecha}}</td>
-               <td>{{item.hora}}</td>
-               <td>{{item.nombreCoordinador}}</td>
-               <td>{{item.nombreEstado}}</td>
-            </tr>
-
-
-
-                     
+                            <!-- <div v-if="item.fecha<={date}">{{date}}</div> -->
+                            <td v-if=" item.tipoAsistencia=== '1' ">
+                                <div  >Escáner</div>
+                            </td>
+                            <td v-if=" item.tipoAsistencia=== '2' ">
+                                <div >Manual</div>
+                            </td> 
+                            <td v-if="item.fecha<={date}" >{{item.fecha}}</td>
+                            <td v-if="item.fecha<={date}" >{{item.hora}}</td>
+                            <td v-if="item.fecha<={date}" >{{item.nombreCoordinador}}</td> 
+                            <td v-if=" item.nombreEstado=== '1' ">
+                                <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
+                            </td>
+                            <td v-if=" item.nombreEstado=== '2'">
+                                <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
+                                    Tardanza
+                                </div>
+                            </td>
+                            <td v-if=" item.nombreEstado=== '3'">
+                                <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
+                                    No asistió
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
-                </table>
-                
+
+                    <tbody v-if="!showDias && showMes && !showMeses">
+                        <tr v-for="item in lista" v-bind:key="item.fecha">
+                            <td v-if=" item.tipoAsistencia=== '1' ">
+                                <div  >Escáner</div>
+                            </td>
+                            <td v-if=" item.tipoAsistencia=== '2' ">
+                                <div >Manual</div>
+                            </td> 
+                            <td v-if="item.fecha <={date}" >{{item.fecha}}</td>
+                            <td v-if="item.fecha <={date}" >{{item.hora}}</td>
+                            <td v-if="item.fecha <={date}">{{item.nombreCoordinador}}</td> 
+                            <td v-if=" item.nombreEstado=== '1' ">
+                                <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
+                            </td>
+                            <td v-if=" item.nombreEstado=== '2'">
+                                <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
+                                    Tardanza
+                                </div>
+                            </td>
+                            <td v-if=" item.nombreEstado=== '3'">
+                                <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
+                                    No asistió
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+
+
+                    <tbody v-if="!showDias && !showMes && showMeses">
+                        <tr v-for="item in lista" v-bind:key="item.fecha">
+
+                            <td v-if=" item.tipoAsistencia=== '1' ">
+                                <div  >Escáner</div>
+                            </td>
+                            <td v-if=" item.tipoAsistencia=== '2' ">
+                                <div >Manual</div>
+                            </td>                            
+
+                            <td v-if="item.fecha <{date}" >{{item.fecha}}</td>
+                            <td v-if="item.fecha <{date}" >{{item.hora}}</td>
+                            <td v-if="item.fecha <{date}">{{item.nombreCoordinador}}</td>
+                            <td v-if=" item.nombreEstado=== '1' ">
+                                <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
+                            </td>
+                            <td v-if=" item.nombreEstado=== '2'">
+                                <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
+                                    Tardanza
+                                </div>
+                            </td>
+                            <td v-if=" item.nombreEstado=== '3'">
+                                <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
+                                    No asistió
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody> 
+
+                </table>       
             </div>
         </div>
     </div>
     
 </template>
+    
 
 <script >
-import {Component, Vue} from "nuxt-property-decorator"
+    import {Component, Vue} from "nuxt-property-decorator"
+// FECHA
 
-export default {
-
-  data() {
-    return {
-      lista: []
-      }
-    },
-
-    components:{
+// FECHA
+    export default {
+        data() {
+            return {
+                lista: [],
+                showDias: true,
+                showMes: false,
+                showMeses : false
+            }
+            
+        },
+        components:{
             Component,
             Vue
-    },
+        },
 
-    methods:{
+        methods :{
+            viewDias(){
+                if (exampleInputEmail1.value =='Últimos 7 días') {
+                // var date;
+                // date = new Date();
+                // date = (date.getUTCFullYear() )+ '-' +
+                // ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+                // ('00' + (date.getUTCDate()-7)).slice(-2) + ' ' ;
 
-        getProducto1:function(){
-            this.$http.get("http://localhost/backend-asistencia/alumno.php")
-              .then(respuesta => {
-                 this.lista = respuesta.data
-                 console.log(respuesta.data) })
-              .catch(error => {console.log("HOLA") })
-    }//fin de la funcion getProducto
+                    this.showDias=true
+                    this.showMes = false
+                    this.showMeses = false 
+                    // alert(date)
+                    
+                }
 
-    },
-     created() {
-        this.getProducto1();
+                if (exampleInputEmail1.value =='2') {
+                // var date;
+                // date = new Date();
+                // date = date.getUTCFullYear() + '-' +
+                // ('00' + (date.getUTCMonth())).slice(-2) + '-' +
+                // ('00' + date.getUTCDate()).slice(-2) + ' ' ;
+
+                    this.showDias=false
+                    this.showMes = true
+                    this.showMeses = false
+                }
+                if (exampleInputEmail1.value =='3') {
+                // var date;
+                // date = new Date();
+                // date = date.getUTCFullYear() + '-' +
+                // ('00' + (date.getUTCMonth()-5)).slice(-2) + '-' +
+                // ('00' + date.getUTCDate()).slice(-2) + ' ' ;
+
+                    this.showDias=false
+                    this.showMes = false
+                    this.showMeses = true
+                }
+            },
+            
+            getAsistencia:function(){
+                this.$http.get("http://localhost/backend-asistencia/AsistenciaAlumno/")
+                .then(respuesta => {
+                    this.lista = respuesta.data
+                    console.log(respuesta.data) 
+                }).catch(error => {console.log("HOLA") })
+            }//fin de la funcion getProducto
+        },
+        created() {
+            this.getAsistencia();
     }
-}    
+}
+
+    
+
+
+
 
 
 </script>
+
+
+
+
 
 <style>
     .reporte-asistencia {
@@ -155,6 +276,4 @@ export default {
         margin-top: 20px;
         text-align: center;
     }
-        
-
 </style>

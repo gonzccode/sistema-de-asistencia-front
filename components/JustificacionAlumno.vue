@@ -24,29 +24,33 @@
                         <th>Estado</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>20/09/2021</td>
-                        <td>Inasistencia</td>
-                        <td style="color: #22be34"><strong> Justificación aceptada</strong> </td>
-                    </tr>
-                    <tr>
-                        <td>10/09/2021</td>
-                        <td>Tardanza</td>
-                        <td style="color: #22be34"> <strong> Justificación aceptada</strong></td>
-                    </tr>
-                    <tr>
-                        <td>05/09/2021</td>
-                        <td>Tardanza</td>
-                        <td style="color: #22be34"> <strong> Justificación aceptada</strong></td>
-                    </tr>
-                    <tr>
-                        
-                        <td>01/09/2021</td>
-                        <td>Inasistencia</td>
-                        <td> <button  type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">No justificado</button> </td>
-                    </tr>
-                    </tbody>
+                    <tbody  >
+                        <tr v-for="item in lista" v-bind:key="item.id">
+                            <td>{{item.fecha}}</td>
+
+                            <td v-if=" item.id_tipo_falta=== '1' ">
+                                <div style="background: #f7b733;border-radius:7px;padding:1px 10px 1px 10px">
+                                    Tardanza
+                                </div>
+                            </td>
+                            <td v-if=" item.id_tipo_falta=== '2'">
+                                <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:1px 10px 1px 10px ">
+                                    No asistió
+                                </div>
+                            </td>
+                            <td v-if=" item.id_estado=== '2' ">
+                                <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Justificacion Aprobado</div>
+                            </td>
+                            <td v-if=" item.id_estado=== '1'">
+                                <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
+                                    Justificacion en Espera
+                                </div>
+                            </td>
+                            <td v-if=" item.id_estado=== '3'">
+                                <button  style="background: #eb1b23;border-radius:7px;color:#ffff;padding:10px 10px 10px 10px " type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">No justificado</button> 
+                            </td>
+                        </tr>
+                    </tbody> 
                 </table>
             </div>
         </div>
@@ -88,14 +92,36 @@
     
 </template>
 
-<script lang="ts">
-    import { Vue } from "nuxt-property-decorator";
-    
+<script >
+    import {Component, Vue} from "nuxt-property-decorator"
+// FECHA
 
-    export default class extends Vue {
-        showModal = false
+// FECHA
+    export default {
+        data() {
+            return {
+                lista: [],
+            }
+            
+        },
+        components:{
+            Component,
+            Vue
+        },
 
+        methods :{            
+            getListaDeFaltas:function(){
+                this.$http.get("http://localhost/backend-asistencia/JusticaciondeFaltas/")
+                .then(respuesta => {
+                    this.lista = respuesta.data
+                    console.log(respuesta.data) 
+                }).catch(error => {console.log("HOLA") })
+            }//fin de la funcion getProducto
+        },
+        created() {
+            this.getListaDeFaltas();
     }
+}
 </script>
 
 <style>
