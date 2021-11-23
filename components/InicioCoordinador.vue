@@ -21,7 +21,7 @@
                 </div>   
             </form>
         </div>
-        <div class="inicio-opcion">
+        <div class="inicio-opcion" align="center">
             <div class="card-image">
                 <a href="#">
                         <figure>
@@ -118,11 +118,19 @@
         
     }
 
+    .inicio-opcion{
+        width: 80%;
+        display: flex;
+        margin: 0 auto
+        
+    }
+
     .card-image{
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+        margin: 10px
         
     }
     .card-image figure{

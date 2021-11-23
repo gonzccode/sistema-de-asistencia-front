@@ -84,7 +84,7 @@ export default {
     methods:{
 
         getProducto1:function(){
-            this.$http.get("http://localhost/APIVUE/")
+            this.$http.get("http://localhost/backend-asistencia/alumno.php")
               .then(respuesta => {
                  this.lista = respuesta.data
                  console.log(respuesta.data) })

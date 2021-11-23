@@ -25,23 +25,22 @@
                     <h2> <strong>Inicio de Sesión</strong> </h2>
                     <div class="mb-4">
                         <label for="exampleInputEmail1" class="form-label"><strong>Código de coordinador</strong> </label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Escriba el código">
+                        <input type="text" class="form-control" id="exampleInputCode" placeholder="Escriba el código" @input="validandoUsuario()" required>
                         
                     </div>
                     <div class="mb-4">
                         <label for="exampleInputPassword1" class="form-label"><strong>Contraseña</strong> </label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Escriba su contraseña">
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Escriba su contraseña" @input="validandoUsuario()" required>
                     </div>
                     <div align="center">
-                        <button type="submit" class="btn btn-primary btn-lg" @click="viewIntranet()">
-                            <a href="http://localhost:3000/intranet-coordinador" style="color:white;text-decoration:none;">
+                        <button type="submit" class="btn btn-primary btn-lg" @click="ingresarUsuario()" >
+                            <a :href="viewInicio?'http://localhost:3000/intranet-coordinador':'http://localhost:3000/login-coordinador'" style="color:white;text-decoration:none;">
                                 Ingresar
                             </a>
                             
                         </button>
                         <p><strong>¿Olvidaste tu contraseña?</strong></p>
                     </div>
-                    
                 </form>
             </div>
             <div class="image-login-coordinador">
@@ -51,24 +50,76 @@
  
     </div>
 </template>
-<script lang="ts">
+<script >
+import {Component, Vue} from "nuxt-property-decorator"
 
-import {Component, Vue } from "nuxt-property-decorator";
+export default {
 
-@Component({
-    components: {
-        
+  data() {
+    return {
+      lista: [],
+      codigoAlumno: '',
+      pwAlumno: '',
+      viewInicio:false
+      }
+    },
+
+    components:{
+            Component,
+            Vue
+    },
+
+    methods:{
+        getCoordinador:function(){
+            this.$http.get("http://localhost:8088/backend-asistencia/coordinador.php")
+              .then(respuesta => {
+                 this.lista = respuesta.data
+                 console.log(this.lista) })
+              .catch(error => {console.log("error en el api") })
+    },
+
+        validandoUsuario(){
+            /*this.codigoAlumno = value
+            console.log('esto es codigo alumno' + this.codigoAlumno) */
+            this.codigoAlumno = document.getElementById("exampleInputCode").value;
+            this.pwAlumno = document.getElementById("exampleInputPassword1").value;
+        },
+
+        ingresarUsuario(){
+            console.log('esto es valor ' + this.codigoAlumno)
+            console.log('esto es valor ' + this.pwAlumno)
+
+            /*for(let i = 1; i <= this.lista.length; i++){
+                if( this.codigoAlumno == this.lista[i].id_alumno && this.pwAlumno == this.lista[i].password ){
+                    this.viewInicio = true
+                    console.log('se valido usuario')
+                    break
+                }
+            }*/
+
+            this.lista.forEach(value => {
+                    if( this.codigoAlumno == value.id_coordinador && this.pwAlumno == value.password ){
+                        this.viewInicio = true
+                        console.log('se valido usuario')
+                    }
+                });
+
             
-    }
-})
+        }
 
-export default class extends Vue {
-    viewIntranet(){
-        window.open('', '_self');
+    },
+     created() {
+        this.getCoordinador();
         
-    }
+    },
 
-}
+    /*mounted(){
+        var valor = document.getElementById("exampleInputCode").value;
+        console.log('esto es valor ' + valor)
+    }*/
+}    
+
+
 </script>
 <style>
     
