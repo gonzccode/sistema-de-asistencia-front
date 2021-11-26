@@ -71,45 +71,53 @@
 
 </template>
 
-<script lang="ts">
+<script >
     import {Component, Vue} from "nuxt-property-decorator"
-    import TablaAsistencia from "~/components/TablaAsistencia.vue";
-  
-    @Component({
-        //@ts-ignore
-        TablaAsistencia
-    })
-    
+    import TablaAsistencia from "../components/TablaAsistencia.vue";
+// FECHA
 
-    export default class extends Vue {
-        showEscaner = true
-        showManual = false
-        showBusqueda = false
-        viewTablaAsistencia = false
+// FECHA
+    export default {
+        data() {
+            return {
+                lista: [],
+                showEscaner: true,
+                showManual: false,
+                showBusqueda : false,
+                viewTablaAsistencia : false
+            }
+            
+        },
+        components:{
+            Component,
+            Vue,
+            TablaAsistencia
+        },
 
-        viewEscaner(){
+        methods :{
+            viewEscaner(){
             this.showEscaner=true
             this.showManual = false
             this.showBusqueda = true          
-        }
+            },
 
-        viewManual(){
-            this.showEscaner=false
-            this.showManual = true
-        }
+            viewManual(){
+                this.showEscaner=false
+                this.showManual = true
+            },
 
-        viewBusqueda(){
-            this.showEscaner=true
-            this.showManual = false
-            this.showBusqueda = true  
-        }
+            viewBusqueda(){
+                this.showEscaner=true
+                this.showManual = false
+                this.showBusqueda = true  
+            },
 
-        viewTabla(){
-            this.viewTablaAsistencia = true
-        }
+            viewTabla(){
+                this.viewTablaAsistencia = true
+            }
+    }
+}
 
-
-    }    
 </script>
 
 
