@@ -13,7 +13,6 @@
                     <strong>
                         INTRANET ALUMNO
                     </strong>
-                     
                 </a>
                 <button class="btn btn-warning d-flex" type="button" style="cursor:default"><strong>Grupo de estudios GOLDBACH</strong> </button>
             </div>
@@ -31,6 +30,7 @@
                     <div class="mb-4">
                         <label for="exampleInputPassword1" class="form-label"><strong>Contraseña</strong> </label>
                         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Escriba su contraseña" @input="validandoUsuario()" required>
+                        <p @click="mostrarPass()">Mostrar contraseña</p>
                     </div>
                     <div class="message-sesion" v-if="errorSesion">
                         <div class="alert alert-danger d-flex align-items-center" role="alert" style="padding-top:5px;padding-bottom:0px">
@@ -44,19 +44,16 @@
                         <button type="submit" class="btn btn-primary btn-lg" @click="ingresarUsuario()" >
                             <a :href="viewInicio?'http://localhost:3000/intranet-alumno':'#error'" style="color:white;text-decoration:none;">
                                 Ingresar
-                            </a>
-                            
+                            </a> 
                         </button>
                         <p @click="loginSesion=false"><strong>¿Olvidaste tu contraseña?</strong></p>
                     </div>
-                    
                 </form>
             </div>
             <div class="fogot-password datos-login-alumno" v-if="!loginSesion">
                 
                 <form class="form-new-pass form-login-alumno" id="formulario" @submit="saveForm" >
                     <div class="volverPage" align="left" style="margin-bottom:20px">
-                        
                         <a href="http://localhost:3000/login-alumno" style="color:black;text-decoration:none;cursor:pointer">
                             <strong> <i class="bi bi-chevron-double-left" style="font-size: 1.5rem"></i> Volver</strong>
                         </a>
@@ -71,6 +68,7 @@
                         <label class="form-label"><strong>Nueva Contraseña</strong> </label>
                         <!--<input type="password" class="form-control" id="inputNewPass" name="contraseña" placeholder="Escriba su nueva contraseña" @input="inputUsuario()" required>-->
                         <input type="password" class="form-control" id="inputNewPass" name="contraseña" placeholder="Escriba su nueva contraseña" :disabled="newPass" required>
+                        <p @click="mostrarPass()">Mostrar contraseña</p>
                     </div>
                     <div class="message-sesion" v-if="errorDni && !savePass">
                         <div class="alert alert-danger d-flex align-items-center" role="alert" style="padding-top:5px;padding-bottom:0px">
@@ -98,27 +96,42 @@
                             Guardar
                         </button>
                     </div>
-                    
                 </form>
-                
             </div>
             <div class="image-login-alumno">
                 <img src="@/assets/images/chicos-estudiando.jpg">
-            </div>  
+            </div> 
         </div>
-        
- 
+        <div class="option-intranet-alumno" v-if="viewComponent" >
+            <InicioAlumno :listaAlumno= "listaAlumno"/>
+            <AsistenciaAlumno :listaAlumno= "listaAlumno"/>
+            <JustificacionAlumno :listaAlumno= "listaAlumno"/>
+        </div>
     </div>
 </template>
 <script >
 import {Component, Vue} from "nuxt-property-decorator"
+import InicioAlumno from "~/components/InicioAlumno.vue";
+//@ts-ignore
+import AsistenciaAlumno from "~/components/AsistenciaAlumno.vue";
+//@ts-ignore
+import JustificacionAlumno from "~/components/JustificacionAlumno.vue";
 //import func from 'vue-editor-bridge'
+import Cookies from 'universal-cookie'; //npm i universal-cookie
 
 export default {
 
   data() {
     return {
         lista: [],
+        listaAlumno:{
+            id_alumno:'',
+            nombre:'',
+            apellido: '',
+            dni:'',
+            correo:'',
+            password:''
+        },
         codigoAlumno: '',
         pwAlumno: '',
         viewInicio:false,
@@ -129,14 +142,18 @@ export default {
         newPassword:'',
         errorDni:false,
         savePass: false,
-        idAlumno: ''
-            
+        idAlumno: '',
+        viewPass: false,
+        viewComponent: false
       }
     },
 
     components:{
             Component,
-            Vue
+            Vue,
+            InicioAlumno,
+            AsistenciaAlumno,
+            JustificacionAlumno   
     },
 
     
@@ -146,7 +163,7 @@ export default {
             this.$http.get("http://localhost:8088/backend-asistencia/alumno.php")
               .then(respuesta => {
                  this.lista = respuesta.data
-                 console.log(this.lista) })
+                })
               .catch(error => {console.log("error en el api") })
     },
 
@@ -161,12 +178,29 @@ export default {
             this.lista.forEach(value => {
                     if( this.codigoAlumno == value.id_alumno && this.pwAlumno == value.password ){
                         this.viewInicio = true
-                        console.log('se valido usuario')
+                        this.listaAlumno.id_alumno = value.id_alumno
+                        this.listaAlumno.nombre = value.nombre
+                        this.listaAlumno.apellido = value.apellido
+                        this.listaAlumno.correo = value.correo
+                        this.listaAlumno.dni = value.dni
+                        this.listaAlumno.password = value.password
+                        
+                        //console.log('se valido usuario')
+                        
+                        const cookies = new Cookies();
+                        //this.modelData.reference = uuidv4()
+                        cookies.set('datas-usuario',this.listaAlumno)
+
+                        
+                        //this.$router.push({name: 'test', query: { reference: this.modelData.reference }})
+                        
                     }
             });
             if (this.codigoAlumno && this.pwAlumno && !this.viewInicio){
                 this.errorSesion=true
             }
+
+            
             
         },
 
@@ -186,7 +220,6 @@ export default {
                         this.newPass = true
                         this.errorDni=false
                         this.idAlumno=value.id_alumno
-                        console.log('se valido dni', this.idAlumno)
                     }
             });
             //this.ingresarUsuario()
@@ -208,6 +241,25 @@ export default {
                 }) 
         },*/
 
+        mostrarPass(){  
+
+            if(this.loginSesion){
+                var tipo = document.getElementById("exampleInputPassword1");
+                if(tipo.type == "password"){
+                    tipo.type = "text";
+                }else{
+                    tipo.type = "password";
+                }
+            }else{
+                var tipo2 = document.getElementById("inputNewPass");
+                if(tipo2.type == "password"){
+                    tipo2.type = "text";
+                }else{
+                    tipo2.type = "password";
+                }
+            }
+        },
+
         saveForm:function(e){
             e.preventDefault();
             var formulario = document.getElementById('formulario')
@@ -216,14 +268,12 @@ export default {
             //validar dni
             this.dniAlumno = datos.get('dniAlumno')
             this.validarDni()
-            console.log('despues de validar', this.idAlumno)
-            console.log('esto es contraseña', datos.get('contraseña'))
             let dniAlumno = datos.get('dniAlumno')
             let newPassword = datos.get('contraseña')
             let idAlumno = this.idAlumno
             const obj = {idAlumno,dniAlumno,newPassword}
             if(!this.errorDni && this.savePass){
-                this.$http.post('http://localhost:8088/backend-asistencia/alumno-post.php',obj)
+                this.$http.post('http://localhost:8088/backend-asistencia/alumno.php',obj)
                     .then(respuesta => {
                         console.log('entro respuesta',respuesta.data)
                         
@@ -231,20 +281,7 @@ export default {
                     .catch(error => {
                         console.log('error del post en frontend', error)
                     })
-                /*fetch('http://localhost:8088/backend-asistencia/alumno-post.php',{
-                    method: 'POST', 
-                    headers : { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body:datos
 
-                })
-                    .then(res => res.text())
-                    .then(data => {
-
-                        console.log(data)
-                    }) */
             }
             
         }

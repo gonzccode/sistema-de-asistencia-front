@@ -96,7 +96,7 @@
                         <td>Juan Quispe</td>
                         <td style="padding:5px 20px">
                             <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Marcar Asistencia</label>
+                            <label class="form-check-label" for="exampleCheck1">Marcar Asistencia</label>
                         </td>
                     </tr>
                     </tbody>

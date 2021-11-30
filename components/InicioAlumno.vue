@@ -17,14 +17,14 @@
         <div class="datos-inicio-alumno">
             <form class="form-datos-inicio-alumno">
                 <div class="mb-2">
-                    <label for="exampleInputEmail1" class="form-label" style="color: rgba(208, 105, 31)"><strong>Bienvenido Alumno: Pepito Perez</strong> </label>    
+                    <label for="exampleInputEmail1" class="form-label" style="color: rgba(208, 105, 31)"><strong>Bienvenido Alumno: {{listaInicioAlumno.nombre}} {{listaInicioAlumno.apellido}}</strong> </label>    
                 </div>   
             </form>
         </div>
         <div class="inicio-opcion" align="center">
             <div class="card-image">
                 <a href="#">
-                        <figure>
+                        <figure >
                             <img src="@/assets/images/registro-asistencia.png">
                             <div class="capa">
                                 <h3><strong>Asistencia</strong></h3>
@@ -52,13 +52,17 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "nuxt-property-decorator"
+    import {Component, Vue, Prop, Emit} from "nuxt-property-decorator"
   
-    @Component({})
+    @Component({
+
+    })
     
 
     export default class extends Vue {
-
+        
+        @Prop() private listaInicioAlumno!:Object
+        
     }    
 </script>
 

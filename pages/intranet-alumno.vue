@@ -52,9 +52,9 @@
                 </div>
             </div>
             <div class="option-intranet-alumno" >
-                    <InicioAlumno v-if="!showJustificacion && showInicio && !showReporte && !showRegistro" />
-                    <AsistenciaAlumno v-if="!showJustificacion && !showInicio && !showReporte && showRegistro" />
-                    <JustificacionAlumno v-if="showJustificacion && !showInicio && !showReporte && !showRegistro" />
+                    <InicioAlumno v-if="!showJustificacion && showInicio && !showReporte && !showRegistro" :listaInicioAlumno="listaIntranetAlumno"/>
+                    <AsistenciaAlumno v-if="!showJustificacion && !showInicio && !showReporte && showRegistro" :listaAsistenciaAlumno="listaIntranetAlumno"/>
+                    <JustificacionAlumno v-if="showJustificacion && !showInicio && !showReporte && !showRegistro"  :listaJustificacionAlumno="listaIntranetAlumno"/>
 
                     
                 
@@ -65,12 +65,13 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue } from "nuxt-property-decorator";
+    import {Component, Vue,Prop,Emit } from "nuxt-property-decorator";
     import InicioAlumno from "~/components/InicioAlumno.vue";
     //@ts-ignore
     import AsistenciaAlumno from "~/components/AsistenciaAlumno.vue";
     //@ts-ignore
     import JustificacionAlumno from "~/components/JustificacionAlumno.vue";
+    import Cookies from 'universal-cookie';
     
   
     @Component({
@@ -90,6 +91,21 @@
         showReporte = false
         showCerrar = false
 
+        listaIntranetAlumno={
+            id_alumno:'',
+            nombre:'',
+            apellido: '',
+            dni:'',
+            correo:'',
+            password:''
+        }
+
+        mounted(){
+            const cookies = new Cookies()
+            this.listaIntranetAlumno = cookies.get('datas-usuario')
+            console.log('listaIntranetAlumno', this.listaIntranetAlumno)
+        }
+
         viewInicio(){
             this.showInicio = true
             this.showRegistro  = false
@@ -99,7 +115,7 @@
         }
 
         viewRegistro(){
-             this.showInicio = false
+            this.showInicio = false
             this.showRegistro  = true
             this.showJustificacion = false
             this.showReporte = false

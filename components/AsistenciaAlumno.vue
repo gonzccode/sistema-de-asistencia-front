@@ -17,8 +17,8 @@
             <form class="form-alumno-asistencia" >
                 <div class="mb-2">
                         <label for="exampleInputEmail1" class="form-label"><strong>Fecha</strong> </label>
-                        <select class="form-select" id="exampleInputEmail1"  aria-label="Default select example">
-                            <option selected>Últimos 7 días</option>
+                        <select class="form-select" id="selectDate"  aria-label="Default select example" @change="showSelect()">
+                            <option value="1" selected>Últimos 7 días</option>
                             <option value="2">Últimos mes</option>
                             <option value="3">Últimos 6 meses</option>
                            
@@ -30,7 +30,7 @@
             </form>
         </div>
         <div class="lista-asistencia">
-            <div class="table-asistencia" align="center">
+            <div class="table-asistencia" align="center" style="overflow-y:scroll; height:300px;"> 
                 <table class="table table-bordered" id="pruebaH">
                     <thead>
                     <tr>
@@ -44,24 +44,27 @@
                     <tbody v-if="showDias && !showMes && !showMeses">
                         <tr v-for="item in lista" v-bind:key="item.id">
                             <!-- <div v-if="item.fecha<={date}">{{date}}</div> -->
-                            <td v-if=" item.tipoAsistencia=== '1' ">
+                            <td v-if=" item.tipo_asistencia=== '0' ">
+                                <div  >Sin Registro </div>
+                            </td>
+                            <td v-if=" item.tipo_asistencia=== '1' ">
                                 <div  >Escáner</div>
                             </td>
-                            <td v-if=" item.tipoAsistencia=== '2' ">
+                            <td v-if=" item.tipo_asistencia=== '2' ">
                                 <div >Manual</div>
                             </td> 
-                            <td v-if="item.fecha<={date}" >{{item.fecha}}</td>
-                            <td v-if="item.fecha<={date}" >{{item.hora}}</td>
-                            <td v-if="item.fecha<={date}" >{{item.nombreCoordinador}}</td> 
-                            <td v-if=" item.nombreEstado=== '1' ">
+                            <td v-if="item.fecha" >{{item.fecha}}</td>
+                            <td v-if="item.fecha" >{{item.hora}}</td>
+                            <td v-if="item.fecha" >{{item.id_coordinador}}</td> 
+                            <td v-if=" item.estado_asistencia=== '1' ">
                                 <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
                             </td>
-                            <td v-if=" item.nombreEstado=== '2'">
+                            <td v-if=" item.estado_asistencia=== '2'">
                                 <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
                                     Tardanza
                                 </div>
                             </td>
-                            <td v-if=" item.nombreEstado=== '3'">
+                            <td v-if=" item.estado_asistencia=== '3'">
                                 <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
                                     No asistió
                                 </div>
@@ -71,24 +74,27 @@
 
                     <tbody v-if="!showDias && showMes && !showMeses">
                         <tr v-for="item in lista" v-bind:key="item.fecha">
-                            <td v-if=" item.tipoAsistencia=== '1' ">
+                            <td v-if=" item.tipo_asistencia=== '0' ">
+                                <div  >Sin Registro </div>
+                            </td>
+                            <td v-if=" item.tipo_asistencia=== '1' ">
                                 <div  >Escáner</div>
                             </td>
-                            <td v-if=" item.tipoAsistencia=== '2' ">
+                            <td v-if=" item.tipo_asistencia=== '2' ">
                                 <div >Manual</div>
                             </td> 
-                            <td v-if="item.fecha <={date}" >{{item.fecha}}</td>
-                            <td v-if="item.fecha <={date}" >{{item.hora}}</td>
-                            <td v-if="item.fecha <={date}">{{item.nombreCoordinador}}</td> 
-                            <td v-if=" item.nombreEstado=== '1' ">
+                            <td v-if="item.fecha" >{{item.fecha}}</td>
+                            <td v-if="item.Fecha" >{{item.hora}}</td>
+                            <td v-if="item.fecha">{{item.id_coordinador}}</td> 
+                            <td v-if=" item.estado_asistencia=== '1' ">
                                 <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
                             </td>
-                            <td v-if=" item.nombreEstado=== '2'">
+                            <td v-if=" item.estado_asistencia=== '2'">
                                 <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
                                     Tardanza
                                 </div>
                             </td>
-                            <td v-if=" item.nombreEstado=== '3'">
+                            <td v-if=" item.estado_asistencia=== '3'">
                                 <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
                                     No asistió
                                 </div>
@@ -102,25 +108,26 @@
                     <tbody v-if="!showDias && !showMes && showMeses">
                         <tr v-for="item in lista" v-bind:key="item.fecha">
 
-                            <td v-if=" item.tipoAsistencia=== '1' ">
+                            <td v-if=" item.tipo_asistencia=== '1' ">
                                 <div  >Escáner</div>
                             </td>
-                            <td v-if=" item.tipoAsistencia=== '2' ">
+                            <td v-if=" item.tipo_asistencia=== '2' ">
                                 <div >Manual</div>
                             </td>                            
 
-                            <td v-if="item.fecha <{date}" >{{item.fecha}}</td>
-                            <td v-if="item.fecha <{date}" >{{item.hora}}</td>
-                            <td v-if="item.fecha <{date}">{{item.nombreCoordinador}}</td>
-                            <td v-if=" item.nombreEstado=== '1' ">
+                            <td v-if="item.fecha" >{{item.fecha}}</td>
+                            <td v-if="item.fecha" >{{item.hora}}</td>
+                            <!--<td v-if="item.fecha <{date}">{{item.id_coordinador}}</td>-->
+                            <td v-if="item.fecha">{{item.id_coordinador}}</td>
+                            <td v-if=" item.estado_asistencia=== '1' ">
                                 <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
                             </td>
-                            <td v-if=" item.nombreEstado=== '2'">
+                            <td v-if=" item.estado_asistencia=== '2'">
                                 <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
                                     Tardanza
                                 </div>
                             </td>
-                            <td v-if=" item.nombreEstado=== '3'">
+                            <td v-if=" item.estado_asistencia=== '3'">
                                 <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
                                     No asistió
                                 </div>
@@ -137,7 +144,8 @@
     
 
 <script >
-    import {Component, Vue} from "nuxt-property-decorator"
+    import {Component, Vue, Prop, Emit} from "nuxt-property-decorator"
+  
 // FECHA
 
 // FECHA
@@ -147,10 +155,24 @@
                 lista: [],
                 showDias: true,
                 showMes: false,
-                showMeses : false
+                showMeses : false,
+                valueSelect : '',
+                showValue : 5
             }
             
         },
+
+        props:{
+            listaAsistenciaAlumno:{
+                id_alumno:'',
+                nombre:'',
+                apellido: '',
+                dni:'',
+                correo:'',
+                password:''
+            }
+        },
+
         components:{
             Component,
             Vue
@@ -158,55 +180,46 @@
 
         methods :{
             viewDias(){
-                if (exampleInputEmail1.value =='Últimos 7 días') {
-                // var date;
-                // date = new Date();
-                // date = (date.getUTCFullYear() )+ '-' +
-                // ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
-                // ('00' + (date.getUTCDate()-7)).slice(-2) + ' ' ;
+                if(this.valueSelect == '1'){
+                    this.showValue = 5
+                    this.getAsistencia()
 
-                    this.showDias=true
-                    this.showMes = false
-                    this.showMeses = false 
-                    // alert(date)
-                    
-                }
+                }else if(this.valueSelect == '2'){
+                    this.showValue = 30
+                    this.getAsistencia()
+                }else if(this.valueSelect == '3') {
+                    this.showValue = 180
+                    this.getAsistencia()
 
-                if (exampleInputEmail1.value =='2') {
-                // var date;
-                // date = new Date();
-                // date = date.getUTCFullYear() + '-' +
-                // ('00' + (date.getUTCMonth())).slice(-2) + '-' +
-                // ('00' + date.getUTCDate()).slice(-2) + ' ' ;
-
-                    this.showDias=false
-                    this.showMes = true
-                    this.showMeses = false
-                }
-                if (exampleInputEmail1.value =='3') {
-                // var date;
-                // date = new Date();
-                // date = date.getUTCFullYear() + '-' +
-                // ('00' + (date.getUTCMonth()-5)).slice(-2) + '-' +
-                // ('00' + date.getUTCDate()).slice(-2) + ' ' ;
-
-                    this.showDias=false
-                    this.showMes = false
-                    this.showMeses = true
                 }
             },
             
             getAsistencia:function(){
-                this.$http.get("http://localhost/backend-asistencia/AsistenciaAlumno/")
+                this.$http.get("http://localhost:8088/backend-asistencia/asistencia-alumno.php")
                 .then(respuesta => {
-                    this.lista = respuesta.data
-                    console.log(respuesta.data) 
-                }).catch(error => {console.log("HOLA") })
-            }//fin de la funcion getProducto
+
+                    respuesta.data.forEach(value => {
+                        if(value.id_alumno == this.listaAsistenciaAlumno.id_alumno && this.lista.length < this.showValue ){
+                            this.lista.push(value)
+                        }   
+                    });
+                }).catch(error => {console.log("error de get Asistencia de alumno") })
+            },//fin de la funcion getProducto
+
+            showSelect(){
+                this.valueSelect = document.getElementById("selectDate").value
+                console.log('show select', this.valueSelect)
+            }
+
         },
         created() {
+            console.log('hola inicio')
+
+        },
+        
+        mounted(){
             this.getAsistencia();
-    }
+        }
 }
 
 </script>
