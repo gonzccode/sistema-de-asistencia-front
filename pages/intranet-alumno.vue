@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="option-intranet-alumno" >
-                    <InicioAlumno v-if="!showJustificacion && showInicio && !showReporte && !showRegistro" :listaInicioAlumno="listaIntranetAlumno"/>
+                    <InicioAlumno v-if="!showJustificacion && showInicio && !showReporte && !showRegistro" :listaInicioAlumno="listaIntranetAlumno" @emitRegistro="valoresRegistro($event)"/>
                     <AsistenciaAlumno v-if="!showJustificacion && !showInicio && !showReporte && showRegistro" :listaAsistenciaAlumno="listaIntranetAlumno"/>
                     <JustificacionAlumno v-if="showJustificacion && !showInicio && !showReporte && !showRegistro"  :listaJustificacionAlumno="listaIntranetAlumno"/>
 
@@ -104,6 +104,15 @@
             const cookies = new Cookies()
             this.listaIntranetAlumno = cookies.get('datas-usuario')
             console.log('listaIntranetAlumno', this.listaIntranetAlumno)
+        }
+
+        valoresRegistro(value:any){
+            this.showInicio = value[0]
+            this.showRegistro  = value[1]
+            this.showJustificacion = value[2]
+            this.showReporte = value[3]
+            this.showCerrar = value[4]
+            
         }
 
         viewInicio(){

@@ -42,7 +42,7 @@
                     </div>
                     <div align="center">
                         <button type="submit" class="btn btn-primary btn-lg" @click="ingresarUsuario()" >
-                            <a :href="viewInicio?'http://localhost:3000/intranet-alumno':'#error'" style="color:white;text-decoration:none;">
+                            <a :href="viewInicio?'http://localhost:3000/intranet-alumno':'#'" style="color:white;text-decoration:none;">
                                 Ingresar
                             </a> 
                         </button>
@@ -159,13 +159,13 @@ export default {
     
 
     methods:{
-        getAlumno:function(){
+        getAlumno(){
             this.$http.get("http://localhost:8088/backend-asistencia/alumno.php")
               .then(respuesta => {
                  this.lista = respuesta.data
                 })
               .catch(error => {console.log("error en el api") })
-    },
+        },
 
         validandoUsuario(){
             this.codigoAlumno = document.getElementById("exampleInputCode").value;
@@ -184,24 +184,16 @@ export default {
                         this.listaAlumno.correo = value.correo
                         this.listaAlumno.dni = value.dni
                         this.listaAlumno.password = value.password
-                        
                         //console.log('se valido usuario')
-                        
                         const cookies = new Cookies();
                         //this.modelData.reference = uuidv4()
                         cookies.set('datas-usuario',this.listaAlumno)
-
-                        
                         //this.$router.push({name: 'test', query: { reference: this.modelData.reference }})
-                        
                     }
             });
             if (this.codigoAlumno && this.pwAlumno && !this.viewInicio){
                 this.errorSesion=true
             }
-
-            
-            
         },
 
         /*inputUsuario(){

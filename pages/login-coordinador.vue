@@ -19,27 +19,35 @@
             </div>
         </nav>
         <div class="container-login-coordinador">
-            <div class="datos-login-coordinador">
+            <div class="datos-login-coordinador"  v-if="loginSesion">
                 
                  <form class="form-login-coordinador">
                     <h2> <strong>Inicio de Sesión</strong> </h2>
                     <div class="mb-4">
-                        <label for="exampleInputEmail1" class="form-label"><strong>Código de coordinador</strong> </label>
-                        <input type="text" class="form-control" id="exampleInputCode" placeholder="Escriba el código" @input="validandoUsuario()" required>
+                        <label for="exampleInputCode" class="form-label"><strong>Código de coordinador</strong> </label>
+                        <input type="text" class="form-control" id="exampleInputCode" placeholder="Escriba su código" @input="validandoUsuario()" required>
                         
                     </div>
                     <div class="mb-4">
                         <label for="exampleInputPassword1" class="form-label"><strong>Contraseña</strong> </label>
                         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Escriba su contraseña" @input="validandoUsuario()" required>
+                        <p @click="mostrarPass()">Mostrar contraseña</p>
+                    </div>
+                    <div class="message-sesion" v-if="errorSesion">
+                        <div class="alert alert-danger d-flex align-items-center" role="alert" style="padding-top:5px;padding-bottom:0px">
+                            <p>
+                                <i class="bi bi-exclamation-circle-fill" style="font-size: 1.5rem"></i>
+                                Usuario o Contraseña incorrecta
+                            </p>
+                        </div>
                     </div>
                     <div align="center">
                         <button type="submit" class="btn btn-primary btn-lg" @click="ingresarUsuario()" >
-                            <a :href="viewInicio?'http://localhost:3000/intranet-coordinador':'http://localhost:3000/login-coordinador'" style="color:white;text-decoration:none;">
+                            <a :href="viewInicio?'http://localhost:3000/intranet-coordinador':'#'" style="color:white;text-decoration:none;">
                                 Ingresar
-                            </a>
-                            
+                            </a> 
                         </button>
-                        <p><strong>¿Olvidaste tu contraseña?</strong></p>
+                        <p @click="loginSesion=false"><strong>¿Olvidaste tu contraseña?</strong></p>
                     </div>
                 </form>
             </div>
@@ -52,6 +60,7 @@
 </template>
 <script >
 import {Component, Vue} from "nuxt-property-decorator"
+import Cookies from 'universal-cookie'; //npm i universal-cookie
 
 export default {
 
@@ -60,7 +69,19 @@ export default {
       lista: [],
       codigoAlumno: '',
       pwAlumno: '',
-      viewInicio:false
+      viewInicio:false,
+      listaCoordinador:{
+            id_coordinador:'',
+            nombre:'',
+            apellido: '',
+            dni:'',
+            correo:'',
+            password:'',
+            fecha_contrato:'',
+            id_persona:''
+        },
+        errorSesion: false,
+        loginSesion:true,
       }
     },
 
@@ -76,35 +97,55 @@ export default {
                  this.lista = respuesta.data
                  console.log(this.lista) })
               .catch(error => {console.log("error en el api") })
-    },
+        },
 
         validandoUsuario(){
-            /*this.codigoAlumno = value
-            console.log('esto es codigo alumno' + this.codigoAlumno) */
             this.codigoAlumno = document.getElementById("exampleInputCode").value;
             this.pwAlumno = document.getElementById("exampleInputPassword1").value;
         },
 
         ingresarUsuario(){
-            console.log('esto es valor ' + this.codigoAlumno)
-            console.log('esto es valor ' + this.pwAlumno)
-
-            /*for(let i = 1; i <= this.lista.length; i++){
-                if( this.codigoAlumno == this.lista[i].id_alumno && this.pwAlumno == this.lista[i].password ){
-                    this.viewInicio = true
-                    console.log('se valido usuario')
-                    break
-                }
-            }*/
-
+            this.viewInicio = false
+            
             this.lista.forEach(value => {
                     if( this.codigoAlumno == value.id_coordinador && this.pwAlumno == value.password ){
                         this.viewInicio = true
-                        console.log('se valido usuario')
+                        this.listaCoordinador.id_coordinador = value.id_coordinador
+                        this.listaCoordinador.nombre = value.nombre
+                        this.listaCoordinador.apellido = value.apellido
+                        this.listaCoordinador.correo = value.correo
+                        this.listaCoordinador.dni = value.dni
+                        this.listaCoordinador.password = value.password
+                        this.listaCoordinador.fecha_contrato = value.fecha_contrato
+                        this.listaCoordinador.id_persona = value.id_persona
+                        
+                        const cookies = new Cookies();
+                        cookies.set('datas-usuario',this.listaCoordinador)
+                        
                     }
-                });
+            });
+            if (this.codigoAlumno && this.pwAlumno && !this.viewInicio){
+                this.errorSesion=true
+            }
+        },
 
-            
+        mostrarPass(){  
+
+            if(this.loginSesion){
+                var tipo = document.getElementById("exampleInputPassword1");
+                if(tipo.type == "password"){
+                    tipo.type = "text";
+                }else{
+                    tipo.type = "password";
+                }
+            }/*else{
+                var tipo2 = document.getElementById("inputNewPass");
+                if(tipo2.type == "password"){
+                    tipo2.type = "text";
+                }else{
+                    tipo2.type = "password";
+                }
+            }*/
         }
 
     },

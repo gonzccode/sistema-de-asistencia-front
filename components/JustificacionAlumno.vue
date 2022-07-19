@@ -51,6 +51,9 @@
                             <td v-if=" item.estado_justificacion=== '3'">
                                 <button  style="background: #eb1b23;border-radius:7px;color:#ffff;padding:10px 10px 10px 10px " type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="enviarIdJustificacion(item.id_justificacion)">No justificado </button> 
                             </td>
+                            <td v-if=" item.estado_justificacion=== '4'">
+                                <button  style="background: #1b1c1d;border-radius:7px;color:#ffff;padding:10px 10px 10px 10px " type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="enviarIdJustificacion(item.id_justificacion)">Justificación Rechazada</button> 
+                            </td>
                         </tr>
                     </tbody> 
                 </table>
@@ -68,13 +71,12 @@
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label"><strong>Descripción</strong> </label>
                                 <textarea class="form-control" id="mensaje-justificacion" placeholder="Escriba justificación" @input="mensajeJustificacion()"></textarea>
-                                
                             </div>
                             <div class="mb-3">
-                                <label for="exampleInputPassword1" class="form-label"><strong>Adjuntar documento</strong> </label>
+                                <label for="inputGroupFile02" class="form-label"><strong>Adjuntar documento</strong> </label>
                                 <!--<input type="text" class="form-control" id="exampleInputPassword1" placeholder="Cargue su documento">-->
                                 <div class="input-group mb-3">
-                                    <input type="file" class="form-control" id="inputGroupFile02" placeholder="Cargue su documento">
+                                    <input @input="imagen()" type="file" name="file" class="form-control" id="inputGroupFile02" placeholder="Cargue su documento">
                                     <!--<label class="input-group-text" for="inputGroupFile02">Upload</label>-->
                                 </div>
                             </div>
@@ -105,7 +107,9 @@
                 lista: [],
                 messageJustificacion: '',
                 modal: false,
-                idJustificacion: ''
+                idJustificacion: '',
+                objeto:Object,
+                filePrueba:''
             }
             
         },
@@ -142,7 +146,7 @@
                 .then(respuesta => {
                     //this.lista = respuesta.data
                     respuesta.data.forEach(value => {
-                            if( value.id_alumno == this.listaJustificacionAlumno.id_alumno && this.lista.length<5){
+                            if( value.id_alumno == this.listaJustificacionAlumno.id_alumno && this.lista.length<15){
                                 this.lista.push(value)
                                 console.log('this.lista',this.lista)
                             }
@@ -156,23 +160,56 @@
                 console.log(this.messageJustificacion)
             },
 
+            imagen(){
+                this.file = document.getElementById('inputGroupFile02').files[0];
+                console.log(this.file)
+            },
+
             enviarJustificacion(){
                 let idJustificacion = this.idJustificacion
                 //let idDetalle = this.listaJustificacionAlumno.idDetalle
                 let idAlumno = this.listaJustificacionAlumno.id_alumno
                 let descripcionjustificacion = this.messageJustificacion
-                const obj ={idJustificacion, idAlumno, descripcionjustificacion}
+                let file = this.file
+                var fileReader = new FileReader();
+                fileReader.readAsDataURL(file);
+               
+               
+               fileReader.onload = () => {
+                    console.log('esto es el resultado', fileReader.result);
+                    let a = fileReader.result
+                    var id_detalle_justificacion = 'DJ-'+this.getRandomInt(9999999,9999999999)
+                    var obj ={id_detalle_justificacion,idJustificacion, idAlumno, descripcionjustificacion,a};
+                    console.log('esto es obj dentro del fileReader', obj);
+                    this.$http.post('http://localhost:8088/backend-asistencia/justificacion-alumno.php',obj)
+                        .then(res => {
+                            console.log('entro respuesta',res.data)
+                            this.lista = []
+                            this.getListaDeFaltas()
+                            // window.onload = this.getListaDeFaltas()
+                        })
+                        .catch(error => {
+                            console.log('error del post en frontend', error)
+                        })   
+                }             
+                /*const obj ={idJustificacion, idAlumno, descripcionjustificacion}
                 console.log('esto es obj', obj)
                 this.$http.post('http://localhost:8088/backend-asistencia/justificacion-alumno.php',obj)
                     .then(res => {
                         console.log('entro respuesta',res.data)
-                        window.onload = this.getListaDeFaltas()
+                        this.lista = []
+                        this.getListaDeFaltas()
                     })
                     .catch(error => {
                         console.log('error del post en frontend', error)
-                    })
+                    })*/
                 
                 
+                
+            },
+
+            getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min)) + min;
             },
 
             enviarIdJustificacion(value){

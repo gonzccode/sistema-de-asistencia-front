@@ -55,7 +55,7 @@
                             </td> 
                             <td v-if="item.fecha" >{{item.fecha}}</td>
                             <td v-if="item.fecha" >{{item.hora}}</td>
-                            <td v-if="item.fecha" >{{item.id_coordinador}}</td> 
+                            <td v-if="item.fecha" >{{item.nombre_coordinador}} {{item.apellido_coordinador}}</td> 
                             <td v-if=" item.estado_asistencia=== '1' ">
                                 <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
                             </td>
@@ -118,7 +118,7 @@
                             <td v-if="item.fecha" >{{item.fecha}}</td>
                             <td v-if="item.fecha" >{{item.hora}}</td>
                             <!--<td v-if="item.fecha <{date}">{{item.id_coordinador}}</td>-->
-                            <td v-if="item.fecha">{{item.id_coordinador}}</td>
+                            <td v-if="item.fecha">{{item.nombre_coordinador}}</td>
                             <td v-if=" item.estado_asistencia=== '1' ">
                                 <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
                             </td>
@@ -153,6 +153,7 @@
         data() {
             return {
                 lista: [],
+                listaCoordinador: [],
                 showDias: true,
                 showMes: false,
                 showMeses : false,
@@ -182,34 +183,55 @@
             viewDias(){
                 if(this.valueSelect == '1'){
                     this.showValue = 5
+                    this.lista=[]
                     this.getAsistencia()
 
                 }else if(this.valueSelect == '2'){
                     this.showValue = 30
+                    this.lista=[]
                     this.getAsistencia()
                 }else if(this.valueSelect == '3') {
                     this.showValue = 180
+                    this.lista=[]
                     this.getAsistencia()
 
                 }
             },
             
-            getAsistencia:function(){
+            getAsistencia(){
                 this.$http.get("http://localhost:8088/backend-asistencia/asistencia-alumno.php")
-                .then(respuesta => {
+                    .then(respuesta => {
 
-                    respuesta.data.forEach(value => {
-                        if(value.id_alumno == this.listaAsistenciaAlumno.id_alumno && this.lista.length < this.showValue ){
-                            this.lista.push(value)
-                        }   
-                    });
-                }).catch(error => {console.log("error de get Asistencia de alumno") })
+                        respuesta.data.forEach(value => {
+                            if(value.id_alumno == this.listaAsistenciaAlumno.id_alumno && this.lista.length < this.showValue ){
+                                this.lista.push(value)
+                            }  
+                        });
+                    }).catch(error => {console.log("error de get Asistencia de alumno") })
+
+               
+                console.log('termino funcion get asistencia',this.lista)
             },//fin de la funcion getProducto
 
             showSelect(){
                 this.valueSelect = document.getElementById("selectDate").value
                 console.log('show select', this.valueSelect)
-            }
+            },
+
+            /*getNombreCoordinador(){
+                 this.$http.get("http://localhost:8088/backend-asistencia/coordinador.php")
+                    .then(res => {
+                        res.data.forEach(v =>{
+                            for(let i=0; i<this.lista.length;i++){
+                                if(this.lista[i].id_coordinador == v.id_coordinador){
+                                    this.lista[i].nombreCoordinador = v.nombre
+                                    this.lista[i].apellidoCoordinador = v.apellido
+                                }
+                            }
+                        })
+                        this.listaCoordinador = this.lista
+                }).catch(error => {'error en get coordinador'})
+            }*/
 
         },
         created() {
@@ -219,6 +241,7 @@
         
         mounted(){
             this.getAsistencia();
+            this.viewDias()
         }
 }
 

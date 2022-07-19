@@ -17,9 +17,9 @@
             <form class="form-datos-alumno">
                 <div class="mb-2">
                     <label for="exampleInputEmail1" class="form-label"><strong>Código de alumno</strong> </label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Escriba el código">
+                    <input type="text" class="form-control" id="inputCodigo" placeholder="Escriba el código" @input="inputCodigo()">
                 </div>
-                <button type="submit" class="btn btn-primary">Buscar</button>
+                <button type="button" class="btn btn-primary" @click="buscarCodigo()">Buscar</button>
             </form>
         </div>
         <div class="lista-justificacion">
@@ -38,36 +38,22 @@
                         <th>Tipo de Falta</th>
                         <th>Justificación</th>
                     </tr>
+
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>20/09/2021</td>
-                        <td>Inasistencia</td>
-                        <td> <button  type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver justificación</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>10/09/2021</td>
-                        <td>Tardanza</td>
-                        <td> <button  type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver justificación</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>05/09/2021</td>
-                        <td>Tardanza</td>
-                        <td> <button  type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver justificación</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>01/09/2021</td>
-                        <td>Inasistencia</td>
-                        <td> <button  type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver justificación</button> </td>
-                    </tr>
+
+                        <tr v-for="(item,index) in lista" :key="index">
+                            <!-- <div v-if="item.fecha<={date}">{{date}}</div> -->
+                            <td v-if="item.estado_justificacion == '1'" >{{item.id_alumno}}</td>
+                            <td v-if="item.estado_justificacion == '1'" >{{item.nombre_alumno}} {{item.apellido_alumno}}</td> 
+                            <td v-if="item.estado_justificacion == '1'" >{{item.fecha}}</td>
+                            <td v-if="item.estado_justificacion == '1'">
+                                <div v-if="item.tipo_falta=='1'">Inasistencia</div>
+                                <div v-if="item.tipo_falta=='2'">Tardanza</div>
+                            </td>
+                            <td v-if="item.estado_justificacion == '1'"> <button  type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="modalJustificacion(index)">Ver justificación</button> </td>
+                            
+                        </tr>
                     </tbody>
                 </table>
                 <table class="table table-bordered" v-if="showAprobado">
@@ -81,34 +67,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>20/09/2021</td>
-                        <td>Inasistencia</td>
-                        <td> <button class="btn btn-success btn-sm" style="background-color: #22be34;cursor:default">Aprobado</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>10/09/2021</td>
-                        <td>Tardanza</td>
-                        <td> <button class="btn btn-success btn-sm" style="background-color: #22be34;cursor:default">Aprobado</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>05/09/2021</td>
-                        <td>Tardanza</td>
-                        <td> <button class="btn btn-success btn-sm" style="background-color: #22be34;cursor:default">Aprobado</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>01/09/2021</td>
-                        <td>Inasistencia</td>
-                       <td> <button class="btn btn-success btn-sm" style="background-color: #22be34;cursor:default">Aprobado</button> </td>
-                    </tr>
+                        <tr v-for="item in lista" v-bind:key="item.id">
+                            <!-- <div v-if="item.fecha<={date}">{{date}}</div> -->
+                            <td v-if="item.estado_justificacion == '2'" >{{item.id_alumno}}</td>
+                            <td v-if="item.estado_justificacion == '2'" >{{item.nombre_alumno}} {{item.apellido_alumno}}</td> 
+                            <td v-if="item.estado_justificacion == '2'" >{{item.fecha}}</td>
+                            <td v-if="item.estado_justificacion == '2'">
+                                <div v-if="item.tipo_falta=='1'">Inasistencia</div>
+                                <div v-if="item.tipo_falta=='2'">Tardanza</div>
+                            </td>
+                            <td v-if="item.estado_justificacion == '2'"> <button class="btn btn-success btn-sm" style="background-color: #22be34;cursor:default">Aprobado</button> </td>
+                            
+                        </tr>
                     </tbody>
                 </table>
                 <table class="table table-bordered" v-if="showRechazado">
@@ -122,40 +92,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>20/09/2021</td>
-                        <td>Inasistencia</td>
-                        <td> <button class="btn btn-danger btn-sm" style="cursor:default">Rechazado</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>10/09/2021</td>
-                        <td>Tardanza</td>
-                        <td> <button class="btn btn-danger btn-sm" style="cursor:default">Rechazado</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>05/09/2021</td>
-                        <td>Tardanza</td>
-                        <td> <button class="btn btn-danger btn-sm" style="cursor:default">Rechazado</button> </td>
-                    </tr>
-                    <tr>
-                        <td>740002G</td>
-                        <td>Pepito Perez</td>
-                        <td>01/09/2021</td>
-                        <td>Inasistencia</td>
-                        <td> <button class="btn btn-danger btn-sm" style="cursor:default">Rechazado</button> </td>
-                    </tr>
+                        <tr v-for="item in lista" v-bind:key="item.id">
+                            <!-- <div v-if="item.fecha<={date}">{{date}}</div> -->
+                            <td v-if="item.estado_justificacion == '4'" >{{item.id_alumno}}</td>
+                            <td v-if="item.estado_justificacion == '4'" >{{item.nombre_alumno}} {{item.apellido_alumno}}</td> 
+                            <td v-if="item.estado_justificacion == '4'" >{{item.fecha}}</td>
+                            <td v-if="item.estado_justificacion == '4'">
+                                <div v-if="item.tipo_falta=='1'">Inasistencia</div>
+                                <div v-if="item.tipo_falta=='2'">Tardanza</div>
+                            </td>
+                            <td v-if="item.estado_justificacion == '4'"><button class="btn btn-danger btn-sm" style="cursor:default">Rechazado</button> </td>
+                            
+                        </tr>
+                    
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                 <div class="modal-header bg-primaary">
                     <h5 class="modal-title" id="exampleModalLabel">Justificación</h5>
@@ -164,13 +119,15 @@
                 <form class="form-justificacion">
                 <div class="modal-body">
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label"><strong>Descripción</strong> </label>
-                            <textarea class="form-control" id="message-text" placeholder="Justificación de estudiante"></textarea>
+                            <label for="exampleInputEmail1" class="form-label"><strong> Descripción de Justicación</strong> </label>
+                            <textarea class="form-control" id="message-text" v-model="descripcionModal" disabled></textarea>
                             
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPassword1" class="form-label"><strong>Archivos adjuntos</strong> </label>
-                            <input type="text" class="form-control" id="exampleInputPassword1">
+                            <!--<input type="text" class="form-control" id="exampleInputPassword1" v-model="archivoModal" disabled>-->
+                            <embed
+                                :src="archivoModal" type="application/pdf" width="100%" height="600px"/>
                             <!--<div class="input-group mb-3">
                                 <input type="file" class="form-control" id="inputGroupFile02">
                                 <label class="input-group-text" for="inputGroupFile02">Upload</label>
@@ -181,8 +138,8 @@
                    
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Aceptar</button>
-                    <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Rechazar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="aprobar()">Aceptar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="rechazar()">Rechazar</button>
                     
                 </div>
                 </form>
@@ -194,44 +151,179 @@
     
 </template>
 
-<script lang="ts">
+<script >
     import {Component, Vue} from "nuxt-property-decorator"
-    //import MenuLateral from "~/components/MenuLateral";
-  
-    @Component({
-        components: {
-            //MenuLateral
+ 
+    export default {
+         data() {
+            return {
+                lista: [],
+                showPendiente: true,
+                showAprobado: false,
+                showRechazado: false,
+                codigo: '',
+                descripcionModal:'',
+                archivoModal:'',
+                //
+                buscarCodigo1: false
+
+            }
+        },
+
+        components:{
+            Component,
+            Vue
+        },
+
+        props:{
+            listaJustificacionCoordinador:{
+                    id_coordinador:'',
+                    nombre:'',
+                    apellido: '',
+                    dni:'',
+                    correo:'',
+                    password:'',
+                    fecha_contrato:'',
+                    id_persona:''
+            }
+        },
+
+        methods:{
+            getListaDeFaltas(){
+                this.$http.get("http://localhost:8088/backend-asistencia/justificacion.php")
+                .then(respuesta => {
+                    //this.lista = respuesta.data
+                    if(!this.buscarCodigo1){
+                         respuesta.data.forEach(value => {
+                            if(value.id_coordinador == this.listaJustificacionCoordinador.id_coordinador){
+                                this.lista.push(value)
+                                console.log('this.lista',this.lista)
+                            }
+                            
+                        });
+                    }else{
+                        respuesta.data.forEach(value => {
+                            if( value.id_alumno == this.codigo && value.id_coordinador == this.listaJustificacionCoordinador.id_coordinador){
+                                this.lista.push(value)
+                                console.log('this.lista',this.lista)
+                            }
+                        });
+                    }
+                    
+                }).catch(error => {console.log("error justificacion alumno") })
+            },//fin de la funcion getProducto
+
+
+            viewPendiente(){
+                this.showPendiente=true
+                this.showAprobado = false
+                this.showRechazado = false
             
+            },
+
+            viewAprobado(){
+                this.showPendiente=false
+                this.showAprobado = true
+                this.showRechazado = false
+                
+            },
+
+            viewRechazado(){
+                this.showPendiente=false
+                this.showAprobado = false
+                this.showRechazado = true
+                
+            },
+
+            inputCodigo(){
+                this.codigo = document.getElementById('inputCodigo').value
+            },
+
+            buscarCodigo(){
+                if(this.codigo){
+                    this.lista = []
+                    this.getListaDeFaltas()
+                    this.buscarCodigo1 = true
+                }else{
+                    this.lista = []
+                    this.getListaDeFaltas()
+                    this.buscarCodigo1 = false
+                }
+                
+            },
+
+            modalJustificacion(value){
+                console.log('esto es value',value )
+                for(let i=0; i < this.lista.length; i++){
+                    if(i == value){
+                        this.descripcionModal = this.lista[i].descripcion_detalle
+                        //this.archivoModal = this.lista[i].archivo_adjunto
+                        this.idDetalle = this.lista[i].id_detalle
+                        this.idJustificacion = this.lista[i].id_justificacion
+                        console.log('this.idJustificacion cuackkkk',this.idJustificacion)
+                        this.$http.get("http://localhost:8088/backend-asistencia/detalleJustificacion.php?id_detalle_justificacion="+this.idDetalle)  
+                            .then(respuesta => {
+                                respuesta.data.forEach(v => {
+                                    if(v.id_detalle = this.idDetalle){
+                                        this.archivoModal = v.text
+                                        console.log('this.archivoModal',this.archivoModal)
+                                    }
+                                })
+                                console.log(respuesta.data) 
+                            
+                        }).catch(error => {console.log("error api detalle justificacion") })
+
+                    }
+                }
+            },
+
+            aprobar:function(){
+                // this.$http.get("http://localhost:8088/backend-asistencia/asistencia-alumno.php")
+                var id = 'JF689495255'
+                var id1 = this.idJustificacion
+                console.log('gaaaa',id1)
+                this.$http.get("http://localhost:8088/backend-asistencia/aprobar.php?id_detalle_justificacion="+id)  
+                .then(respuesta => {
+                    this.lista = []
+                    this.getListaDeFaltas()
+                    console.log("entro aprobar", this.id_justificacion)
+                    this.buscarCodigo1 = false
+                    
+                }).catch(error => {console.log("a") })
+            },
+            rechazar:function(){
+                // this.$http.get("http://localhost:8088/backend-asistencia/asistencia-alumno.php")
+                var id = 'JF199776896'
+                this.$http.get("http://localhost:8088/backend-asistencia/rechazar.php?id_detalle_justificacion="+id)  
+                .then(respuesta => {
+                    this.lista = []
+                    this.getListaDeFaltas()
+                    console.log("entro rechazar", this.id_justificacion)
+                    this.buscarCodigo1 = false
+
+                }).catch(error => {console.log("a") })
+            },
+
+            /*getDetalle:function(id){
+                
+                this.$http.get("http://localhost:8088/backend-asistencia/detalleJustificacion.php?id_detalle_justificacion="+id)  
+                .then(respuesta => {
+                    respuesta.data.forEach(v => {
+                        if(v.id_detalle = id){
+                            this.archivoModal = v.text
+                            console.log('this.archivoModal',this.archivoModal)
+                        }
+                    })
+                    console.log(respuesta.data) 
+                    
+                }).catch(error => {console.log("error api detalle justificacion") })
+            }*/
+        },
+
+        mounted(){
+                this.getListaDeFaltas()
+                console.log('this.listaJustificacionCoordinador',this.listaJustificacionCoordinador)
         }
-    })
-    
-
-    export default class extends Vue {
-        showPendiente = true
-        showAprobado = false
-        showRechazado = false
-
-        viewPendiente(){
-            this.showPendiente=true
-            this.showAprobado = false
-            this.showRechazado = false
-            
-        }
-
-        viewAprobado(){
-            this.showPendiente=false
-            this.showAprobado = true
-            this.showRechazado = false
-            
-        }
-
-        viewRechazado(){
-            this.showPendiente=false
-            this.showAprobado = false
-            this.showRechazado = true
-            
-        }
-
     }
 </script>
 

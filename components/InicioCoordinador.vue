@@ -17,12 +17,12 @@
         <div class="datos-inicio-coordinador">
             <form class="form-datos-coordinador">
                 <div class="mb-2">
-                    <label for="exampleInputEmail1" class="form-label" style="color: rgba(208, 105, 31)"><strong>Bienvenido Coordinador: Ricardo Quispe</strong> </label>    
+                    <label for="exampleInputEmail1" class="form-label" style="color: rgba(208, 105, 31)"><strong>Bienvenido Coordinador: {{listaInicioCoordinador.nombre}} {{listaInicioCoordinador.apellido}}</strong> </label>    
                 </div>   
             </form>
         </div>
         <div class="inicio-opcion" align="center">
-            <div class="card-image">
+            <div class="card-image" @click="enviarPadre1()">
                 <a href="#">
                         <figure>
                             <img src="@/assets/images/registro-asistencia.png">
@@ -33,7 +33,7 @@
                         </figure>
                 </a>
             </div>
-            <div class="card-image">
+            <div class="card-image" @click="enviarPadre2()">
                 <a href="#">
                         <figure>
                             <img src="@/assets/images/justificacion-falta.png">
@@ -44,7 +44,7 @@
                         </figure>
                 </a>
             </div>
-            <div class="card-image">
+            <div class="card-image" @click="enviarPadre3()">
                 <a href="#">
                         <figure>
                             <img src="@/assets/images/reporte-asistencia.png">
@@ -63,14 +63,41 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "nuxt-property-decorator"
+    import {Component, Vue, Prop, Emit} from "nuxt-property-decorator"
   
-    @Component({})
+    @Component({
+
+    })
     
 
     export default class extends Vue {
         
-    }    
+        @Prop() private listaInicioCoordinador!:Object
+
+        mounted(){
+            console.log('listaInicioCoordinador', this.listaInicioCoordinador)
+        }
+
+        @Emit('emitRegistro')
+         enviarPadre1(){
+            let registro=[false,true,false,false,false]
+            return registro
+        }
+
+        @Emit('emitRegistro')
+         enviarPadre2(){
+            let justificacion=[false,false,true,false,false]
+            return justificacion
+        }
+
+        @Emit('emitRegistro')
+         enviarPadre3(){
+            let reporte=[false,false,false,true,false]
+            return reporte
+        }
+
+        
+    }      
 </script>
 
 

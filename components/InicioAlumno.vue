@@ -22,8 +22,8 @@
             </form>
         </div>
         <div class="inicio-opcion" align="center">
-            <div class="card-image">
-                <a href="#">
+            <div class="card-image" @click="enviarPadre1()">
+                <a href="http://localhost:3000/intranet-alumno#registro">
                         <figure >
                             <img src="@/assets/images/registro-asistencia.png">
                             <div class="capa">
@@ -33,8 +33,8 @@
                         </figure>
                 </a>
             </div>
-            <div class="card-image">
-                <a href="#">
+            <div class="card-image"  @click="enviarPadre2()">
+                <a href="http://localhost:3000/intranet-alumno#justificacion">
                         <figure>
                             <img src="@/assets/images/justificacion-falta.png">
                             <div class="capa">
@@ -62,6 +62,18 @@
     export default class extends Vue {
         
         @Prop() private listaInicioAlumno!:Object
+
+        @Emit('emitRegistro')
+         enviarPadre1(){
+            let registro=[false,true,false,false,false]
+            return registro
+        }
+
+        @Emit('emitRegistro')
+         enviarPadre2(){
+            let justificacion=[false,false,true,false,false]
+            return justificacion
+        }
         
     }    
 </script>

@@ -57,21 +57,22 @@
                 </div>
             </div>
             <div class="option-intranet-coordinador" >
-                    <InicioCoordinador v-if="!showJustificacion && showInicio && !showReporte && !showRegistro" />
-                    <AsistenciaCoordinador v-if="!showJustificacion && !showInicio && !showReporte && showRegistro" />
-                    <JustificacionCoordinador v-if="showJustificacion && !showInicio && !showReporte && !showRegistro" />
-                    <ReporteAsistencia v-if="!showJustificacion && !showInicio && showReporte && !showRegistro"/>
+                    <InicioCoordinador v-if="!showJustificacion && showInicio && !showReporte && !showRegistro" :listaInicioCoordinador="listaIntranetCoordinador" @emitRegistro="valoresRegistro($event)"/>
+                    <AsistenciaCoordinador v-if="!showJustificacion && !showInicio && !showReporte && showRegistro" :listaAsistenciaCoordinador="listaIntranetCoordinador"/>
+                    <JustificacionCoordinador v-if="showJustificacion && !showInicio && !showReporte && !showRegistro" :listaJustificacionCoordinador="listaIntranetCoordinador" />
+                    <ReporteAsistencia v-if="!showJustificacion && !showInicio && showReporte && !showRegistro" :listaReporteCoordinador="listaIntranetCoordinador"/>
             </div>
          </div>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Vue } from "nuxt-property-decorator";
+    import {Component, Vue, Prop,Emit } from "nuxt-property-decorator";
     import InicioCoordinador from "~/components/InicioCoordinador.vue";
     import AsistenciaCoordinador from "~/components/AsistenciaCoordinador.vue";
     import JustificacionCoordinador from "~/components/JustificacionCoordinador.vue";
     import ReporteAsistencia from "~/components/ReporteAsistencia.vue";
+    import Cookies from 'universal-cookie';
   
     @Component({
         components: {
@@ -90,6 +91,31 @@
         showJustificacion = false
         showReporte = false
         showCerrar = false
+        listaIntranetCoordinador= {
+            id_coordinador:'',
+            nombre:'',
+            apellido: '',
+            dni:'',
+            correo:'',
+            password:'',
+            fecha_contrato:'',
+            id_persona:''
+        }
+
+        mounted(){
+            const cookies = new Cookies()
+            this.listaIntranetCoordinador = cookies.get('datas-usuario')
+            console.log('listaIntranetCoordinador', this.listaIntranetCoordinador)
+        }
+
+        valoresRegistro(value:any){
+            this.showInicio = value[0]
+            this.showRegistro  = value[1]
+            this.showJustificacion = value[2]
+            this.showReporte = value[3]
+            this.showCerrar = value[4]
+            
+        }
 
         viewInicio(){
             this.showInicio = true

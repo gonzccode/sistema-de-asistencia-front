@@ -117,13 +117,20 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "nuxt-property-decorator"
+    import {Component, Prop, Vue} from "nuxt-property-decorator"
   
     @Component({})
 
 
     export default class extends Vue {
+        @Prop() listaRegistroAlumno!:object
+
         showGuardar=false
+
+        mounted(){
+            console.log('stamos en tabla', this.listaRegistroAlumno)
+        }
+
         viewGuardar(){
             this.showGuardar=true 
         }

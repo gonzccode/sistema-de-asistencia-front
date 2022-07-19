@@ -22,27 +22,27 @@
             <form class="form-tabla-asistencia" >
                      <fieldset disabled>
                     <div class="mb-2">  
-                        <label><strong>Programación de Asistencia</strong> </label>        
+                        <h5><strong>Programación de Asistencia</strong> </h5>        
                     </div>
                     <div class="mb-2">
-                        <label for="exampleInputEmail1" class="form-label"><strong>Código</strong> </label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="2018xxxx">
+                        <label for="exampleInputEmail1" class="form-label"><strong>Código de Alumno</strong> </label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" v-model="listaRegistroAlumno.id_alumno">
                         
                     </div>
                     <div class="mb-2">
-                        <label for="exampleInputPassword1" class="form-label"><strong>Nombre(s)</strong> </label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Pepito">
+                        <label for="exampleInputPassword1" class="form-label"><strong>Nombre de Alumno</strong> </label>
+                        <input type="text" class="form-control" id="exampleInputPassword1" v-model="listaRegistroAlumno.nombre" >
                     </div>
                     <div class="mb-2">
                         <label for="exampleInputPassword1" class="form-label"><strong>Apellidos</strong> </label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Perez">
+                        <input type="text" class="form-control" id="exampleInputPassword1" v-model="listaRegistroAlumno.apellido">
                     </div>
                     </fieldset>
             </form>
         </div>
         <div class="lista-tabla-asistencia">
             
-            <div class="table-tabla-asistencia" align="center">
+            <div class="table-tabla-asistencia" align="center" >
                 <table class="table table-bordered" >
                     <thead>
                     <tr>
@@ -53,59 +53,58 @@
                         <th>Estado</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>Escaner</td>
-                        <td>20/09/2021</td>
-                        <td>08:15 am</td>
-                        <td>Ricardo Quispe</td>
-                        <td style="padding:5px 20px">
-                            <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">
-                                Asistió
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td> -- </td>
-                        <td>18/09/2021</td>
-                        <td> -- </td>
-                        <td>Juan Quispe</td>
-                        <td style="padding:5px 20px">
-                            <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
-                                No asistió
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <tr>
-                        <td>Escaner</td>
-                        <td>17/09/2021</td>
-                        <td>08:10 am</td>
-                        <td>Ricardo Quispe</td>
-                        <td style="padding:5px 20px">
-                            <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">
-                                Asistió
-                            </div>
-                        </td>
-                    
-                    </tr>
-                    <tr>
-                        <td>Escaner</td>
-                        <td>24/09/2021</td>
-                        <td>08:30 am</td>
-                        <td>Juan Quispe</td>
-                        <td style="padding:5px 20px">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Marcar Asistencia</label>
-                        </td>
-                    </tr>
+                    <tbody >
+                        <tr v-if="!viewHoy">
+                            <td>{{listaRegistroAlumno.tipo_asistencia}}</td>
+                            <td>{{listaRegistroAlumno.fecha}}</td>
+                            <td>{{listaRegistroAlumno.hora}}</td>
+                            <td>{{listaRegistroAlumno.nombre_coordinador}} {{listaRegistroAlumno.apellido_coordinador}}</td>
+                            <td style="padding:5px 20px">
+                                <input type="checkbox" id="checkAsistencia" @click="marcarAsistencia()">
+                                <label >Marcar Asistencia</label>
+                            </td>
+                        </tr>
+                        <tr v-for="item in lista" v-bind:key="item.id">
+                            <!-- <div v-if="item.fecha<={date}">{{date}}</div> -->
+                            <td v-if=" item.tipo_asistencia=== '0' ">
+                                <div  >Sin Registro </div>
+                            </td>
+                            <td v-if=" item.tipo_asistencia=== '1' ">
+                                <div  >Escáner</div>
+                            </td>
+                            <td v-if=" item.tipo_asistencia=== '2' ">
+                                <div >Manual</div>
+                            </td> 
+                            <td v-if="item.fecha" >{{item.fecha}}</td>
+                            <td v-if="item.fecha" >{{item.hora}}</td>
+                            <td v-if="item.fecha" >{{item.nombre_coordinador}} {{item.apellido_coordinador}}</td> 
+                            <td v-if=" item.estado_asistencia=== '1' ">
+                                <div style="background: #22be34;border-radius:7px;color:#ffff;padding:4px 0px">Asistió</div>
+                            </td>
+                            <td v-if=" item.estado_asistencia=== '2'">
+                                <div style="background: #f7b733;border-radius:7px;padding:4px 0px">
+                                    Tardanza
+                                </div>
+                            </td>
+                            <td v-if=" item.estado_asistencia=== '3'">
+                                <div style="background: #eb1b23;border-radius:7px;color:#ffff;padding:4px 0px">
+                                    No asistió
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-success btn-lg" >Volver</button>
+                <button type="button" class="btn btn-success btn-lg" @click="EnviarPadre()">Volver</button>
+                <!--<a href="http://localhost:3000/intranet-coordinador#registro" style="color:white;text-decoration:none;cursor:pointer">
+                            Volver
+                    </a>-->
                 <button type="button" :class="showGuardar?'btn btn-primary active':'btn btn-primary'" @click="viewGuardar()"  style="padding:10px 30px">Guardar</button>
-                <div v-if="showGuardar">                
+                <div v-if="showGuardar && clickGuardar">                
                     <script>toastr.success('Registro exitoso')</script> 
                 </div>
+                <!--<div v-if="!showGuardar && clickGuardar">                
+                    <script>toastr.error('Marcar Asistencia')</script> 
+                </div>-->
 
 
             </div>
@@ -114,17 +113,149 @@
     
 </template>
 
-<script lang="ts">
-    import {Component, Vue} from "nuxt-property-decorator"
+<script>
+    import {Component, Vue, Prop, Emit} from "nuxt-property-decorator"
   
-    @Component({})
+// FECHA
+
+// FECHA
+    export default {
+        data() {
+            return {
+                lista: [],
+                showGuardar: false,
+                listaRegistroDiario:{
+                    id_alumno:'',
+                    dni:'',
+                    tipo_asistencia:'',
+                    estado_asistencia:'',
+                    fecha:'',
+                    hora:'',
+                    id_coordinador:''
+                },
+                marcar: false,
+                clickGuardar: false,
+                viewHoy: false,
+                valorHijo: null
+
+            }
+        },
+
+        components:{
+            Component,
+            Vue
+        },
+
+        props:{
+            listaRegistroAlumno:{
+                    id_alumno:'',
+                    nombre:'',
+                    apellido: '',
+                    dni:'',
+                    correo:'',
+                    password:'',
+                    tipo_asistencia:'',
+                    estado_asistencia:'',
+                    fecha:'',
+                    hora:'',
+                    id_coordinador:'',
+                    nombre_coordinador:'',
+                    apellido_coordinador:''
+            }
+        },
+
+        methods:{
+            getAsistencia(){
+                this.$http.get("http://localhost:8088/backend-asistencia/asistencia-alumno.php")
+                    .then(respuesta => {
+
+                        respuesta.data.forEach(value => {
+                            if(value.id_alumno == this.listaRegistroAlumno.id_alumno && this.lista.length < 4 ){
+                                this.lista.push(value)
+                            }  
+                        });
+                        this.lista.forEach(v=>{
+                            console.log('v.fecha',v.fecha)
+                            if(this.listaRegistroAlumno.fecha == v.fecha){
+                                this.viewHoy =  true
+
+                                console.log('entro a vie hoy')
+                            }
+                        })
+                    }).catch(error => {console.log("error de get Asistencia de alumno") })
+                
+            },//fin de la funcion getProductos
+
+            EnviarPadre(){
+                this.valorHijo = false
+                this.$emit('escucharHijo',this.valorHijo)
+            },
+
+            viewGuardar(){
+                this.clickGuardar = true
+                if(this.marcar && this.clickGuardar){
+                    this.showGuardar=true 
+                    console.log('entro a registrar asistencia', this.showGuardar, this.clickGuardar)
+                    if(this.listaRegistroAlumno.tipo_asistencia=='Escaner'){
+                        this.listaRegistroDiario.tipo_asistencia = '1'
+                    }else if(this.listaRegistroAlumno.tipo_asistencia=='Manual'){
+                        this.listaRegistroDiario.tipo_asistencia = '2'
+                    }
+
+                    if(this.listaRegistroAlumno.estado_asistencia=='asistio'){
+                        this.listaRegistroDiario.estado_asistencia = '1'
+                    }else if(this.listaRegistroAlumno.estado_asistencia=='tardanza'){
+                        this.listaRegistroDiario.estado_asistencia = '2'
+                    }
+                    var id_registro_asistencia = 'RA'+this.getRandomInt(9999999,9999999999)
+                    var id_alumno = this.listaRegistroAlumno.id_alumno
+                    var dni_alumno = this.listaRegistroAlumno.dni
+                    var tipo_asistencia = this.listaRegistroDiario.tipo_asistencia
+                    var estado_asistencia = this.listaRegistroDiario.estado_asistencia
+                    var fecha = this.listaRegistroAlumno.fecha
+                    var hora = this.listaRegistroAlumno.hora
+                    var id_coordinador = this.listaRegistroAlumno.id_coordinador
+                    const obj = {id_registro_asistencia,id_alumno,dni_alumno,tipo_asistencia,estado_asistencia,fecha,hora,id_coordinador}
+                    
+                    
+                    this.$http.post('http://localhost:8088/backend-asistencia/asistencia-alumno.php',obj)
+                        .then(respuesta => {
+                                console.log('entro respuesta',respuesta.data)
+                                this.lista=[]
+                                this.getAsistencia()
+                                
+                        })
+                        .catch(error => {
+                            console.log('error del post en frontend', error)
+                        })
+                }else if (!this.marcar && this.clickGuardar){
+                    this.showGuardar=false 
+                    
+                }
+
+                
 
 
-    export default class extends Vue {
-        showGuardar=false
-        viewGuardar(){
-            this.showGuardar=true 
+            },
+
+            marcarAsistencia(){
+                this.marcar = document.getElementById('checkAsistencia').checked
+                console.log('marcar:', this.marcar)
+            },
+            getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min)) + min;
+            }
+
+        },
+
+        
+        mounted(){
+            this.getAsistencia()
         }
+
+        
+
+        
 
     }
 </script>
